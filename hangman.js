@@ -13,9 +13,10 @@ request(queryURL, function(error, response, body)
 		{
 			pokemon.push((bodyObject.results[i].name).toUpperCase());
 		}
-		console.log(pokemon[149]);
 		var rand = Math.floor(Math.random()*pokemon.length);
 		var wordToGuess = new Word(pokemon[rand]);
+		ask();
+
 	}
 	else
 	{
@@ -24,26 +25,55 @@ request(queryURL, function(error, response, body)
 })
 
 
+function cl (text)
+{
+	console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + text + "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+}
 
-// var userGuess = process.argv[2];
-// if (userGuess === undefined || userGuess.charAt(0) === " " || userGuess.charAt(0) === "")
-// {
-// 	console.log("You can't do that");
-// }
-// else if (userGuess.length > 1)
-// {
-// 	console.log("Please enter only one letter at a time");
-// }
-// else if (userGuess.charCodeAt(0) < 65 || (userGuess.charCodeAt(0) > 90 && userGuess.charCodeAt(0) < 97)  || userGuess.charCodeAt(0) > 122)
-// {
-// 	console.log("that is not a letter");
-// }
-// else
-// {
-// 	userGuess = userGuess.toUpperCase();
-// 	userGuess = userGuess.charAt(0);
-// 	console.log(userGuess);
-// }
+
+
+function ask() 
+{
+	inquirer.prompt([
+	{
+		type: "input",
+		name: "guess",
+		message: "WHO'S THAT POKEMON? (Guess a letter)"
+	}]).then(function(answer)
+	{
+		if (answer.guess === undefined || answer.guess.charAt(0) === " " || answer.guess.charAt(0) === "")
+		{
+			cl("You can't do that. You have to guess something.");
+		}
+		else if (answer.guess.length > 1)
+		{
+			cl("Too many at a time! Please enter only one character at a time.");
+		}
+		else if (answer.guess.charCodeAt(0) < 65 || (answer.guess.charCodeAt(0) > 90 && answer.guess.charCodeAt(0) < 97)  || answer.guess.charCodeAt(0) > 122)
+		{
+			cl("Don't be silly! Pick from the alphabet.");
+		}
+		else
+		{
+			answer.guess = answer.guess.toUpperCase();
+			answer.guess = answer.guess.charAt(0);
+			for (var i = 0; i < wordToGuess.wordArray.length; i++)
+			{
+				wordToGuess.wordArray[i].guess(answer.guess);
+			}
+			console.log(wordToGuess);
+			console.log(wordToGuess+" ");
+			if (!wordToGuess.hasFound())
+			{
+				ask();
+			}
+			else if (wordToGuess.hasFound())
+			{
+				console.log("I think you just won");
+			}
+		}
+	});
+}
 
 //prompt, are you ready to play?
 

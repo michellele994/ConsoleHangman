@@ -15,7 +15,7 @@ Word.prototype.hasFound = function()
 {
 	for (var i = 0; i < this.wordArray.length; i++)
 	{
-		if (this.wordArray[0].found === false)
+		if (this.wordArray[i].found === false)
 		{
 			return;
 		}
