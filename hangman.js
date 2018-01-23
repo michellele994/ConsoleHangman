@@ -120,8 +120,8 @@ request(queryURL, function(error, response, body)
 				}
 				else if (numOfTries <= 0)
 				{
+					cl("You lost! You are as useful as a Magikarp. The answer is: " + pokeToGuess +"\nYou had a streak of " + streak);
 					streak = 0;
-					console.log("You lost! You are as useful as a Magikarp. The answer is: " + pokeToGuess);
 				}
 			});
 		}
