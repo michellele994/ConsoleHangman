@@ -13,16 +13,21 @@ Word.prototype.toString = function() {
 }
 Word.prototype.hasFound = function()
 {
+	var numFound = 0;
 	for (var i = 0; i < this.wordArray.length; i++)
 	{
-		if (this.wordArray[i].found === false)
+		if (this.wordArray[i].found)
 		{
-			return;
+			numFound++;	
 		}
-		else
-		{
-			return true;
-		}
+	}
+	if(numFound === this.wordArray.length)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
