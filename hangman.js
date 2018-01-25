@@ -1,6 +1,7 @@
 var inquirer = require("inquirer");
 var request = require("request");
 var Word = require("./word.js");
+var colors = require("colors");
 var queryURL = "http://pokeapi.co/api/v2/pokemon/?limit=150";
 request(queryURL, function(error, response, body)
 {
@@ -17,10 +18,13 @@ request(queryURL, function(error, response, body)
 			pokemon.push((bodyObject.results[i].name).toUpperCase());
 		}
 		pokemon[121] = "MRMIME";
+		pokemon[28] = "NIDORANF";
+		pokemon[31] = "NIDORANM";
+
 		var pokeToGuess = pokemon[Math.floor(Math.random()*pokemon.length)];
 		var wordToGuess = new Word(pokeToGuess);
-		cl("Do you want to be the very best?")
-		console.log(wordToGuess+" \n");
+		cl(colors.white("Do you want to be the very best?"));
+		console.log(colors.cyan(wordToGuess+" \n"));
 		ask();
 
 		function ask() 
@@ -29,7 +33,7 @@ request(queryURL, function(error, response, body)
 			{
 				type: "input",
 				name: "guess",
-				message: "WHO'S THAT POKEMON? (Guess a letter)",
+				message: colors.white("WHO'S THAT POKEMON? (Guess a letter)"),
 				when: function()
 				{
 					return (!wordToGuess.hasFound() && numOfTries > 0);
@@ -40,20 +44,20 @@ request(queryURL, function(error, response, body)
 				{
 					if (answer.guess === undefined || answer.guess.charAt(0) === " " || answer.guess.charAt(0) === "")
 					{
-						cl("You can't do that. You have to guess something.");
-						console.log(wordToGuess+" \n");
+						cl(colors.grey("You can't do that. You have to guess something."));
+						console.log(colors.cyan(wordToGuess+" \n"));
 						ask();
 					}
 					else if (answer.guess.length > 1)
 					{
-						cl("Too many at a time! Please enter only one character at a time.");
-						console.log(wordToGuess+" \n");
+						cl(colors.grey("Too many at a time! Please enter only one character at a time."));
+						console.log(colors.cyan(wordToGuess+" \n"));
 						ask();
 					}
 					else if (answer.guess.charCodeAt(0) < 65 || (answer.guess.charCodeAt(0) > 90 && answer.guess.charCodeAt(0) < 97)  || answer.guess.charCodeAt(0) > 122)
 					{
-						cl("Don't be silly! Pick from the alphabet.");
-						console.log(wordToGuess+" \n");
+						cl(colors.grey("Don't be silly! Pick from the alphabet."));
+						console.log(colors.cyan(wordToGuess+" \n"));
 						ask();
 					}
 					else
@@ -70,8 +74,8 @@ request(queryURL, function(error, response, body)
 						}
 						if (alreadyTried > 0)
 						{
-							cl("You already tried that letter, silly! Try another one.");
-							console.log(wordToGuess+" \n");
+							cl(colors.grey("You already tried that letter, silly! Try another one."));
+							console.log(colors.cyan(wordToGuess+" \n"));
 							ask();
 							alreadyTried = 0;
 						}
@@ -90,14 +94,14 @@ request(queryURL, function(error, response, body)
 							if (numChanges === 0)
 							{
 								numOfTries--;
-								cl("Wrong! Number of tries left: " + numOfTries);
+								cl(colors.red("Wrong! Number of tries left: " + numOfTries));
 							}
 							else
 							{
-								cl("CORRECT!")
+								cl("CORRECT!");
 								numChanges = 0;
 							}
-							console.log(wordToGuess+" \n");
+							console.log(colors.cyan(wordToGuess+" \n"));
 
 
 							if (!wordToGuess.hasFound())
@@ -112,7 +116,7 @@ request(queryURL, function(error, response, body)
 								wordToGuess = new Word(pokeToGuess);
 								streak++;
 								cl("YOU WON!!!! You put the 'COOL' in 'TENTACOOL'! Keep going!! Streak: " + streak);
-								console.log(wordToGuess+" \n");
+								console.log(colors.cyan(wordToGuess+" \n"));
 								ask();
 							}
 						}
@@ -136,5 +140,5 @@ request(queryURL, function(error, response, body)
 
 function cl (text)
 {
-	console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + text + "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+	console.log(colors.white("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n") + text + colors.white("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"));
 }
